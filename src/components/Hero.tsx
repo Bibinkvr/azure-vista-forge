@@ -1,9 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Users, Award, Globe } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import heroPersonImage from "@/assets/hero-person.jpg";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
       {/* Background Elements */}
@@ -65,16 +67,18 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 className="bg-gradient-primary hover:shadow-glow transition-smooth group"
+                onClick={() => navigate("/auth")}
               >
-                Get Free Consultation
+                Get Started
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-smooth" />
               </Button>
               <Button 
                 variant="outline" 
                 size="lg"
                 className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
+                onClick={() => navigate("/auth")}
               >
-                View Services
+                Start Recording Now
               </Button>
             </div>
           </div>
