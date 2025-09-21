@@ -1,9 +1,12 @@
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { 
   Phone, 
   Mail, 
@@ -15,6 +18,66 @@ import {
 } from "lucide-react";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.email || !formData.message) {
+      toast({
+        title: "Error",
+        description: "Please fill in all required fields",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('send-consultation-email', {
+        body: formData
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "Your consultation request has been sent successfully. We'll get back to you within 24 hours.",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error("Error sending consultation request:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   const countries = [
     "United States", "Canada", "United Kingdom", "Australia", 
     "Germany", "France", "Netherlands", "Sweden", "New Zealand", "Ireland"
@@ -55,14 +118,17 @@ const Contact = () => {
               <h3 className="text-2xl font-bold text-foreground">Talk to Our Experts!</h3>
             </div>
             
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="name" className="text-foreground">Your Name</Label>
                   <Input 
                     id="name"
                     placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={(e) => handleInputChange("name", e.target.value)}
                     className="mt-1 bg-background border-border focus:border-primary"
+                    required
                   />
                 </div>
                 <div>
@@ -71,7 +137,10 @@ const Contact = () => {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange("email", e.target.value)}
                     className="mt-1 bg-background border-border focus:border-primary"
+                    required
                   />
                 </div>
               </div>
@@ -82,6 +151,8 @@ const Contact = () => {
                   <Input 
                     id="phone"
                     placeholder="Enter your phone no."
+                    value={formData.phone}
+                    onChange={(e) => handleInputChange("phone", e.target.value)}
                     className="mt-1 bg-background border-border focus:border-primary"
                   />
                 </div>
@@ -116,8 +187,11 @@ const Contact = () => {
                 <Textarea 
                   id="message"
                   placeholder="Tell us about your educational goals..."
+                  value={formData.message}
+                  onChange={(e) => handleInputChange("message", e.target.value)}
                   rows={4}
                   className="mt-1 bg-background border-border focus:border-primary resize-none"
+                  required
                 />
               </div>
 
@@ -125,8 +199,9 @@ const Contact = () => {
                 type="submit"
                 size="lg"
                 className="w-full bg-gradient-primary hover:shadow-glow transition-smooth group"
+                disabled={loading}
               >
-                Get a Free Consultation!
+                {loading ? "Sending..." : "Get a Free Consultation!"}
                 <Send className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-smooth" />
               </Button>
             </form>
