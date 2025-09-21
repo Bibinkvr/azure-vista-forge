@@ -3,15 +3,15 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight, Users, Award, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import heroPersonImage from "@/assets/hero-person.jpg";
-
 const Hero = () => {
   const navigate = useNavigate();
-  return (
-    <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
+  return <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
       <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-accent/15 rounded-full blur-3xl animate-float" style={{ animationDelay: "2s" }}></div>
+      <div className="absolute bottom-1/4 left-1/4 w-96 h-96 bg-accent/15 rounded-full blur-3xl animate-float" style={{
+      animationDelay: "2s"
+    }}></div>
 
       <div className="container mx-auto px-4 lg:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 items-center min-h-screen py-20">
@@ -38,16 +38,11 @@ const Hero = () => {
             <div className="flex items-center space-x-6">
               <div className="flex items-center space-x-2">
                 <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="w-8 h-8 rounded-full bg-gradient-primary border-2 border-background flex items-center justify-center"
-                    >
+                  {[1, 2, 3, 4].map(i => <div key={i} className="w-8 h-8 rounded-full bg-gradient-primary border-2 border-background flex items-center justify-center">
                       <span className="text-xs font-bold text-primary-foreground">
                         {String.fromCharCode(65 + i)}
                       </span>
-                    </div>
-                  ))}
+                    </div>)}
                 </div>
                 <div>
                   <p className="font-semibold">20,000+</p>
@@ -64,33 +59,20 @@ const Hero = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="bg-gradient-primary hover:shadow-glow transition-smooth group"
-                onClick={() => navigate("/auth")}
-              >
+              <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-smooth group" onClick={() => navigate("/auth")}>
                 Sign In / Sign Up
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-smooth" />
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-smooth"
-                onClick={() => navigate("/auth")}
-              >
-                Start Recording Now
-              </Button>
+              
             </div>
           </div>
 
           {/* Hero Image */}
-          <div className="relative animate-fade-in" style={{ animationDelay: "0.3s" }}>
+          <div className="relative animate-fade-in" style={{
+          animationDelay: "0.3s"
+        }}>
             <div className="relative z-10">
-              <img
-                src={heroPersonImage}
-                alt="Professional education consultant helping students achieve global success"
-                className="w-full h-auto rounded-2xl shadow-elegant"
-              />
+              
             </div>
             
             {/* Floating Elements */}
@@ -106,7 +88,9 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="absolute -bottom-6 -left-6 bg-card shadow-card rounded-2xl p-4 animate-float" style={{ animationDelay: "1s" }}>
+            <div className="absolute -bottom-6 -left-6 bg-card shadow-card rounded-2xl p-4 animate-float" style={{
+            animationDelay: "1s"
+          }}>
               <div className="flex items-center space-x-3">
                 <div className="bg-accent p-2 rounded-lg">
                   <Award className="h-5 w-5 text-accent-foreground" />
@@ -118,7 +102,9 @@ const Hero = () => {
               </div>
             </div>
 
-            <div className="absolute top-1/2 -right-12 bg-card shadow-card rounded-2xl p-4 animate-float" style={{ animationDelay: "2s" }}>
+            <div className="absolute top-1/2 -right-12 bg-card shadow-card rounded-2xl p-4 animate-float" style={{
+            animationDelay: "2s"
+          }}>
               <div className="flex items-center space-x-3">
                 <div className="bg-gradient-primary p-2 rounded-lg">
                   <Globe className="h-5 w-5 text-primary-foreground" />
@@ -132,8 +118,6 @@ const Hero = () => {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Hero;
