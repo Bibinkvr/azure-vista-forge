@@ -69,7 +69,7 @@ const Hero = () => {
                 className="bg-gradient-primary hover:shadow-glow transition-smooth group"
                 onClick={() => navigate("/auth")}
               >
-                Get Started
+                Sign In / Sign Up
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-smooth" />
               </Button>
               <Button 
