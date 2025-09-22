@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Shield } from "lucide-react";
+import ForcePasswordChange from "@/components/admin/ForcePasswordChange";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
@@ -15,10 +16,21 @@ const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [needsPasswordChange, setNeedsPasswordChange] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
+    // Auto-create default super admin on first access
+    const initializeAdmin = async () => {
+      try {
+        // Call the function to ensure super admin exists
+        await supabase.rpc('create_default_super_admin');
+      } catch (error) {
+        console.error("Error initializing super admin:", error);
+      }
+    };
+
     // Check if user is already logged in and is admin
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -31,11 +43,16 @@ const AdminLogin = () => {
           .single();
         
         if (adminProfile) {
-          navigate("/admin/dashboard");
+          if (adminProfile.force_password_change) {
+            setNeedsPasswordChange(true);
+          } else {
+            navigate("/admin/dashboard");
+          }
         }
       }
     };
     
+    initializeAdmin();
     checkAuth();
   }, [navigate]);
 
@@ -65,12 +82,30 @@ const AdminLogin = () => {
           throw new Error("Access denied. Admin privileges required.");
         }
 
-        toast({
-          title: "Success",
-          description: "Logged in successfully as admin",
-        });
+        if (!adminProfile.is_active) {
+          await supabase.auth.signOut();
+          throw new Error("Account is deactivated. Contact super admin.");
+        }
 
-        navigate("/admin/dashboard");
+        // Update last login
+        await supabase
+          .from("admin_profiles")
+          .update({ last_login: new Date().toISOString() })
+          .eq("user_id", data.user.id);
+
+        if (adminProfile.force_password_change) {
+          setNeedsPasswordChange(true);
+          toast({
+            title: "Password Change Required",
+            description: "Please update your credentials for security",
+          });
+        } else {
+          toast({
+            title: "Success",
+            description: "Logged in successfully as admin",
+          });
+          navigate("/admin/dashboard");
+        }
       }
     } catch (error: any) {
       console.error("Admin login error:", error);
@@ -84,6 +119,15 @@ const AdminLogin = () => {
       setLoading(false);
     }
   };
+
+  const handlePasswordChangeComplete = () => {
+    setNeedsPasswordChange(false);
+    navigate("/admin/dashboard");
+  };
+
+  if (needsPasswordChange) {
+    return <ForcePasswordChange onPasswordChanged={handlePasswordChangeComplete} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted flex items-center justify-center p-4">

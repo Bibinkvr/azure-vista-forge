@@ -27,15 +27,18 @@ import AdminMessages from "@/components/admin/AdminMessages";
 import AdminProfile from "@/components/admin/AdminProfile";
 import AdminServices from "@/components/admin/AdminServices";
 import AdminTestimonials from "@/components/admin/AdminTestimonials";
+import AdminManagement from "@/components/admin/AdminManagement";
 
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [adminProfile, setAdminProfile] = useState<any>(null);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [stats, setStats] = useState({
     totalMessages: 0,
     unreadMessages: 0,
     totalServices: 0,
-    totalTestimonials: 0
+    totalTestimonials: 0,
+    totalAdmins: 0
   });
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -72,6 +75,7 @@ const AdminDashboard = () => {
       }
 
       setAdminProfile(profile);
+      setIsSuperAdmin(profile.is_super_admin);
       await loadStats();
     } catch (error) {
       console.error("Error checking auth:", error);
@@ -103,11 +107,21 @@ const AdminDashboard = () => {
         .from("testimonials")
         .select("*", { count: "exact", head: true });
 
+      // Get admins count (only for super admin)
+      let totalAdmins = 0;
+      if (adminProfile?.is_super_admin) {
+        const { count: adminsCount } = await supabase
+          .from("admin_profiles")
+          .select("*", { count: "exact", head: true });
+        totalAdmins = adminsCount || 0;
+      }
+
       setStats({
         totalMessages: totalMessages || 0,
         unreadMessages: unreadMessages || 0,
         totalServices: totalServices || 0,
-        totalTestimonials: totalTestimonials || 0
+        totalTestimonials: totalTestimonials || 0,
+        totalAdmins
       });
     } catch (error) {
       console.error("Error loading stats:", error);
@@ -165,7 +179,7 @@ const AdminDashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${isSuperAdmin ? '5' : '4'} gap-6 mb-8`}>
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
@@ -205,14 +219,27 @@ const AdminDashboard = () => {
               <div className="text-2xl font-bold">{stats.totalTestimonials}</div>
             </CardContent>
           </Card>
+
+          {isSuperAdmin && (
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Admin Users</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalAdmins}</div>
+              </CardContent>
+            </Card>
+          )}
         </div>
 
         {/* Tabs */}
         <Tabs defaultValue="messages" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className={`grid w-full grid-cols-${isSuperAdmin ? '5' : '4'}`}>
             <TabsTrigger value="messages">Messages</TabsTrigger>
             <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            {isSuperAdmin && <TabsTrigger value="admins">Admin Management</TabsTrigger>}
             <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
 
@@ -227,6 +254,12 @@ const AdminDashboard = () => {
           <TabsContent value="testimonials">
             <AdminTestimonials onStatsUpdate={loadStats} />
           </TabsContent>
+
+          {isSuperAdmin && (
+            <TabsContent value="admins">
+              <AdminManagement />
+            </TabsContent>
+          )}
 
           <TabsContent value="profile">
             <AdminProfile 

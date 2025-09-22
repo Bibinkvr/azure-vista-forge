@@ -19,8 +19,13 @@ export type Database = {
           avatar_url: string | null
           created_at: string
           email: string
+          force_password_change: boolean
           id: string
+          is_active: boolean
+          is_super_admin: boolean
+          last_login: string | null
           name: string
+          permissions: Json | null
           updated_at: string
           user_id: string
         }
@@ -28,8 +33,13 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           email: string
+          force_password_change?: boolean
           id?: string
+          is_active?: boolean
+          is_super_admin?: boolean
+          last_login?: string | null
           name: string
+          permissions?: Json | null
           updated_at?: string
           user_id: string
         }
@@ -37,8 +47,13 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string
           email?: string
+          force_password_change?: boolean
           id?: string
+          is_active?: boolean
+          is_super_admin?: boolean
+          last_login?: string | null
           name?: string
+          permissions?: Json | null
           updated_at?: string
           user_id?: string
         }
@@ -148,7 +163,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_default_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      has_super_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       is_admin: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
+      is_super_admin: {
         Args: { user_id: string }
         Returns: boolean
       }
