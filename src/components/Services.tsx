@@ -85,7 +85,7 @@ const Services = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 auto-rows-fr">
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
@@ -108,7 +108,7 @@ const Services = () => {
               return (
                 <Card 
                   key={service.id || service.title}
-                  className="bg-gradient-card shadow-card hover:shadow-elegant transition-smooth p-6 group hover:-translate-y-2 animate-fade-in"
+                  className="bg-gradient-card shadow-card hover:shadow-elegant transition-smooth p-6 group hover:-translate-y-2 animate-fade-in flex flex-col h-full"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="mb-4">
@@ -121,13 +121,13 @@ const Services = () => {
                     {service.title}
                   </h3>
                   
-                  <p className="text-muted-foreground mb-4 leading-relaxed">
+                  <p className="text-muted-foreground mb-4 leading-relaxed flex-grow">
                     {service.description}
                   </p>
 
                   <Button 
                     variant="outline" 
-                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-smooth"
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-smooth mt-auto"
                   >
                     Learn More
                     <ArrowRight className="ml-2 h-4 w-4" />

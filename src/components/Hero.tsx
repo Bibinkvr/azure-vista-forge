@@ -60,7 +60,7 @@ const Hero = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button size="lg" className="bg-gradient-primary hover:shadow-glow transition-smooth group" onClick={() => navigate("/auth")}>
-                Sign In / Sign Up
+                Get Started Now
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-smooth" />
               </Button>
               
