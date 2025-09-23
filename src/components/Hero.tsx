@@ -2,10 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight, Users, Award, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import TrackableAirplane from "./TrackableAirplane";
 import heroPersonImage from "@/assets/hero-person.jpg";
 const Hero = () => {
   const navigate = useNavigate();
   return <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
+      {/* Trackable Airplane */}
+      <TrackableAirplane />
+      
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-hero opacity-10"></div>
       <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-float"></div>

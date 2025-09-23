@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,7 @@ const iconMap: { [key: string]: any } = {
 };
 
 const Services = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -128,6 +130,7 @@ const Services = () => {
                   <Button 
                     variant="outline" 
                     className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-smooth mt-auto"
+                    onClick={() => navigate(`/service/${service.id}`)}
                   >
                     Learn More
                     <ArrowRight className="ml-2 h-4 w-4" />

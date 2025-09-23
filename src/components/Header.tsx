@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, GraduationCap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   const navItems = [
     { label: "Home", href: "#home" },
@@ -47,8 +49,9 @@ const Header = () => {
             <Button 
               variant="default" 
               className="bg-gradient-primary hover:shadow-glow transition-smooth"
+              onClick={() => navigate("/auth")}
             >
-              Get Started
+              Sign Up
             </Button>
           </div>
 
@@ -79,8 +82,9 @@ const Header = () => {
                 <Button 
                   variant="default" 
                   className="w-full bg-gradient-primary hover:shadow-glow transition-smooth"
+                  onClick={() => navigate("/auth")}
                 >
-                  Get Started
+                  Sign Up
                 </Button>
               </div>
             </nav>
