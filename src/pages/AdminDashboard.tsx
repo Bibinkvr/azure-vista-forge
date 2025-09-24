@@ -65,7 +65,7 @@ const AdminDashboard = () => {
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
@@ -83,7 +83,7 @@ const AdminDashboard = () => {
           variant: "destructive",
         });
         await supabase.auth.signOut();
-        navigate("/admin/login");
+        navigate("/auth");
         return;
       }
 
@@ -92,7 +92,7 @@ const AdminDashboard = () => {
       await loadStats();
     } catch (error) {
       console.error("Error checking auth:", error);
-      navigate("/admin/login");
+      navigate("/auth");
     } finally {
       setLoading(false);
     }
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
-      navigate("/admin/login");
+      navigate("/");
       toast({
         title: "Success",
         description: "Signed out successfully",

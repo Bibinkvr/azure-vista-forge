@@ -20,26 +20,46 @@ const Auth = () => {
     const checkUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
-        navigate("/dashboard");
+        await redirectBasedOnRole(session.user);
       }
     };
     checkUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (session) {
-        navigate("/dashboard");
+        await redirectBasedOnRole(session.user);
       }
     });
 
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const redirectBasedOnRole = async (user: any) => {
+    try {
+      // Check if user is admin
+      const { data: profile } = await supabase
+        .from("admin_profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
+
+      if (profile) {
+        navigate("/admin/dashboard");
+      } else {
+        navigate("/profile");
+      }
+    } catch (error) {
+      // If not admin, redirect to user profile
+      navigate("/profile");
+    }
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     
-    const redirectUrl = `${window.location.origin}/dashboard`;
+    const redirectUrl = `${window.location.origin}/profile`;
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -68,7 +88,7 @@ const Auth = () => {
     e.preventDefault();
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error, data } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -79,6 +99,8 @@ const Auth = () => {
         description: error.message,
         variant: "destructive",
       });
+    } else if (data.user) {
+      await redirectBasedOnRole(data.user);
     }
     setLoading(false);
   };

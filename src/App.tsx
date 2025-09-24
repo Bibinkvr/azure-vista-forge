@@ -6,8 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useEffect } from "react";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import AdminLogin from "./pages/AdminLogin";
+import UserProfile from "./pages/UserProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import ServiceDetail from "./pages/ServiceDetail";
 import NotFound from "./pages/NotFound";
@@ -29,8 +28,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/profile" element={<UserProfile />} />
             <Route path="/admin/dashboard" element={<AdminDashboard />} />
             <Route path="/service/:id" element={<ServiceDetail />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
