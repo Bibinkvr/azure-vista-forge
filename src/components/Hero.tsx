@@ -56,10 +56,7 @@ const Hero = () => {
             </div>
 
             {/* Contact Info */}
-            <Card className="bg-gradient-card shadow-card p-6 max-w-md">
-              <h3 className="font-semibold mb-2">Contact Us:</h3>
-              <p className="text-primary font-semibold text-lg">+1-555-EDUCATION</p>
-            </Card>
+            
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
@@ -76,11 +73,7 @@ const Hero = () => {
           animationDelay: "0.3s"
         }}>
             <div className="relative z-10">
-              <img 
-                src={educationHeroImage} 
-                alt="Students studying abroad with global education opportunities" 
-                className="w-full h-auto rounded-3xl shadow-elegant"
-              />
+              <img src={educationHeroImage} alt="Students studying abroad with global education opportunities" className="w-full h-auto rounded-3xl shadow-elegant" />
             </div>
             
             {/* Floating Elements */}
