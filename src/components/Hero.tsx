@@ -73,7 +73,7 @@ const Hero = () => {
           animationDelay: "0.3s"
         }}>
             <div className="relative z-10">
-              <img src={heroStudentsImage} alt="Diverse students with graduation caps representing global education opportunities" className="w-full h-auto rounded-3xl shadow-elegant" />
+              
             </div>
             
             {/* Floating Elements */}
