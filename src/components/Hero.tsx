@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowRight, Users, Award, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TrackableAirplane from "./TrackableAirplane";
-import heroPersonImage from "@/assets/hero-person.jpg";
+import educationHeroImage from "@/assets/education-hero.jpg";
 const Hero = () => {
   const navigate = useNavigate();
   return <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
@@ -76,7 +76,11 @@ const Hero = () => {
           animationDelay: "0.3s"
         }}>
             <div className="relative z-10">
-              
+              <img 
+                src={educationHeroImage} 
+                alt="Students studying abroad with global education opportunities" 
+                className="w-full h-auto rounded-3xl shadow-elegant"
+              />
             </div>
             
             {/* Floating Elements */}
