@@ -237,6 +237,9 @@ const AdminDashboard = () => {
                   </Avatar>
                   <span className="text-sm font-medium">{adminProfile?.name}</span>
                 </div>
+                <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+                  Back to Home
+                </Button>
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   <LogOut className="h-4 w-4 mr-2" />
                   Sign Out
