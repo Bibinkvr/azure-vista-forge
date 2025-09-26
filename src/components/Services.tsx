@@ -87,13 +87,16 @@ const Services = () => {
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 auto-rows-fr">
+        <div className={services.length > 6 ? 
+          "flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent" : 
+          "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 auto-rows-fr"
+        }>
           {loading ? (
             // Loading skeleton
             Array.from({ length: 6 }).map((_, index) => (
               <Card 
                 key={index}
-                className="bg-gradient-card shadow-card p-6 animate-pulse"
+                className={`bg-gradient-card shadow-card p-6 animate-pulse ${services.length > 6 ? 'flex-shrink-0 w-80' : ''}`}
               >
                 <div className="mb-4">
                   <div className="bg-gray-300 p-3 rounded-xl w-12 h-12"></div>
@@ -110,7 +113,7 @@ const Services = () => {
               return (
                 <Card 
                   key={service.id || service.title}
-                  className="bg-gradient-card shadow-card hover:shadow-elegant transition-smooth p-6 group hover:-translate-y-2 animate-fade-in flex flex-col h-full"
+                  className={`bg-gradient-card shadow-card hover:shadow-elegant transition-smooth p-6 group hover:-translate-y-2 animate-fade-in flex flex-col h-full ${services.length > 6 ? 'flex-shrink-0 w-80' : ''}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="mb-4">

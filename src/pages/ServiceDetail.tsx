@@ -3,7 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, BookOpen, FileText, Users, GraduationCap, Plane, FileCheck, Phone, Mail } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { ArrowLeft, BookOpen, FileText, Users, GraduationCap, Plane, FileCheck, Phone, Mail, Edit, Save, X } from "lucide-react";
 import Header from "@/components/Header";
 
 // Icon mapping for dynamic icons
@@ -22,8 +27,34 @@ const iconMap: { [key: string]: any } = {
 const ServiceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [service, setService] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState({
+    title: "",
+    description: "",
+    icon: ""
+  });
+
+  useEffect(() => {
+    checkAdminStatus();
+    loadService();
+  }, [id]);
+
+  const checkAdminStatus = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user) {
+      const { data: adminProfile } = await supabase
+        .from("admin_profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .single();
+      
+      setIsAdmin(!!adminProfile);
+    }
+  };
 
   useEffect(() => {
     loadService();
@@ -35,17 +66,64 @@ const ServiceDetail = () => {
         .from("services")
         .select("*")
         .eq("id", id)
-        .eq("is_active", true)
-        .single();
+        .single(); // Remove is_active filter for admins
 
       if (error) throw error;
       setService(data);
+      setEditData({
+        title: data.title,
+        description: data.description,
+        icon: data.icon
+      });
     } catch (error) {
       console.error("Error loading service:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  const handleEdit = () => {
+    setEditMode(true);
+  };
+
+  const handleSave = async () => {
+    try {
+      const { error } = await supabase
+        .from("services")
+        .update(editData)
+        .eq("id", id);
+
+      if (error) throw error;
+      
+      setService({ ...service, ...editData });
+      setEditMode(false);
+      toast({
+        title: "Success",
+        description: "Service updated successfully"
+      });
+    } catch (error) {
+      console.error("Error updating service:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update service",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    setEditData({
+      title: service.title,
+      description: service.description,
+      icon: service.icon
+    });
+    setEditMode(false);
+  };
+
+  const availableIcons = [
+    "BookOpen", "FileText", "Users", "GraduationCap", 
+    "Plane", "FileCheck", "Settings", "Brain", "TrendingUp"
+  ];
 
   if (loading) {
     return (
@@ -102,18 +180,57 @@ const ServiceDetail = () => {
                 Back to Services
               </Button>
               
-              <div className="flex items-center gap-6 mb-8">
-                <div className="bg-gradient-primary p-6 rounded-2xl shadow-glow">
-                  <Icon className="h-12 w-12 text-primary-foreground" />
+              <div className="flex items-center justify-between gap-6 mb-8">
+                <div className="flex items-center gap-6">
+                  <div className="bg-gradient-primary p-6 rounded-2xl shadow-glow">
+                    <Icon className="h-12 w-12 text-primary-foreground" />
+                  </div>
+                  <div>
+                    {editMode ? (
+                      <div className="space-y-4">
+                        <Input
+                          value={editData.title}
+                          onChange={(e) => setEditData({...editData, title: e.target.value})}
+                          className="text-4xl lg:text-5xl font-bold bg-transparent border-2 border-primary"
+                        />
+                        <p className="text-xl text-muted-foreground">
+                          Professional guidance for your educational journey
+                        </p>
+                      </div>
+                    ) : (
+                      <>
+                        <h1 className="text-4xl lg:text-5xl font-bold mb-4">
+                          {service.title}
+                        </h1>
+                        <p className="text-xl text-muted-foreground">
+                          Professional guidance for your educational journey
+                        </p>
+                      </>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-                    {service.title}
-                  </h1>
-                  <p className="text-xl text-muted-foreground">
-                    Professional guidance for your educational journey
-                  </p>
-                </div>
+                
+                {isAdmin && (
+                  <div className="flex gap-2">
+                    {editMode ? (
+                      <>
+                        <Button onClick={handleSave} size="sm" className="bg-green-600 hover:bg-green-700">
+                          <Save className="h-4 w-4 mr-2" />
+                          Save
+                        </Button>
+                        <Button onClick={handleCancel} variant="outline" size="sm">
+                          <X className="h-4 w-4 mr-2" />
+                          Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <Button onClick={handleEdit} variant="outline" size="sm">
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -127,10 +244,36 @@ const ServiceDetail = () => {
                 {/* Main Content */}
                 <div className="lg:col-span-2 space-y-8">
                   <Card className="p-8 shadow-elegant">
-                    <h2 className="text-2xl font-bold mb-6">Service Overview</h2>
-                    <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                      {service.description}
-                    </p>
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-2xl font-bold">Service Overview</h2>
+                      {isAdmin && editMode && (
+                        <Select value={editData.icon} onValueChange={(value) => setEditData({...editData, icon: value})}>
+                          <SelectTrigger className="w-40">
+                            <SelectValue placeholder="Select icon" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availableIcons.map((iconName) => (
+                              <SelectItem key={iconName} value={iconName}>
+                                {iconName}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    </div>
+                    
+                    {editMode ? (
+                      <Textarea
+                        value={editData.description}
+                        onChange={(e) => setEditData({...editData, description: e.target.value})}
+                        className="text-lg leading-relaxed mb-8 min-h-32"
+                        placeholder="Enter service description..."
+                      />
+                    ) : (
+                      <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                        {service.description}
+                      </p>
+                    )}
                     
                     <div className="space-y-6">
                       <div>
