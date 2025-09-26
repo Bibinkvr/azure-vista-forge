@@ -79,7 +79,7 @@ const Services = () => {
         {/* Section Header */}
         <div className="text-center mb-16 animate-slide-up">
           <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            Our <span className="text-gradient">Services</span>
+            This Month's <span className="text-gradient">Recommended Study Abroad Programs</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Comprehensive educational consultancy services to guide you through every step of your global education journey.
