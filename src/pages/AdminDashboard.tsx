@@ -6,41 +6,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  LogOut, 
-  MessageSquare, 
-  Settings, 
-  Star, 
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  TrendingUp,
-  Users,
-  Eye,
-  Edit,
-  Trash2,
-  Plus,
-  Shield
-} from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { LogOut, MessageSquare, Settings, Star, User, Mail, Phone, Calendar, TrendingUp, Users, Eye, Edit, Trash2, Plus, Shield } from "lucide-react";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminProfile from "@/components/admin/AdminProfile";
 import AdminServices from "@/components/admin/AdminServices";
 import AdminTestimonials from "@/components/admin/AdminTestimonials";
 import AdminManagement from "@/components/admin/AdminManagement";
-
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [adminProfile, setAdminProfile] = useState<any>(null);
@@ -54,39 +26,39 @@ const AdminDashboard = () => {
     totalAdmins: 0
   });
   const navigate = useNavigate();
-  const { toast } = useToast();
-
+  const {
+    toast
+  } = useToast();
   useEffect(() => {
     checkAuthAndLoadData();
   }, []);
-
   const checkAuthAndLoadData = async () => {
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      const {
+        data: {
+          session
+        }
+      } = await supabase.auth.getSession();
       if (!session) {
         navigate("/auth");
         return;
       }
 
       // Check if user is admin
-      const { data: profile, error: profileError } = await supabase
-        .from("admin_profiles")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .single();
-
+      const {
+        data: profile,
+        error: profileError
+      } = await supabase.from("admin_profiles").select("*").eq("user_id", session.user.id).single();
       if (profileError || !profile) {
         toast({
           title: "Access Denied",
           description: "Admin privileges required",
-          variant: "destructive",
+          variant: "destructive"
         });
         await supabase.auth.signOut();
         navigate("/auth");
         return;
       }
-
       setAdminProfile(profile);
       setIsSuperAdmin(profile.is_super_admin);
       await loadStats();
@@ -97,38 +69,49 @@ const AdminDashboard = () => {
       setLoading(false);
     }
   };
-
   const loadStats = async () => {
     try {
       // Get message stats
-      const { count: totalMessages } = await supabase
-        .from("user_messages")
-        .select("*", { count: "exact", head: true });
-
-      const { count: unreadMessages } = await supabase
-        .from("user_messages")
-        .select("*", { count: "exact", head: true })
-        .eq("status", "unread");
+      const {
+        count: totalMessages
+      } = await supabase.from("user_messages").select("*", {
+        count: "exact",
+        head: true
+      });
+      const {
+        count: unreadMessages
+      } = await supabase.from("user_messages").select("*", {
+        count: "exact",
+        head: true
+      }).eq("status", "unread");
 
       // Get services count
-      const { count: totalServices } = await supabase
-        .from("services")
-        .select("*", { count: "exact", head: true });
+      const {
+        count: totalServices
+      } = await supabase.from("services").select("*", {
+        count: "exact",
+        head: true
+      });
 
       // Get testimonials count
-      const { count: totalTestimonials } = await supabase
-        .from("testimonials")
-        .select("*", { count: "exact", head: true });
+      const {
+        count: totalTestimonials
+      } = await supabase.from("testimonials").select("*", {
+        count: "exact",
+        head: true
+      });
 
       // Get admins count (only for super admin)
       let totalAdmins = 0;
       if (adminProfile?.is_super_admin) {
-        const { count: adminsCount } = await supabase
-          .from("admin_profiles")
-          .select("*", { count: "exact", head: true });
+        const {
+          count: adminsCount
+        } = await supabase.from("admin_profiles").select("*", {
+          count: "exact",
+          head: true
+        });
         totalAdmins = adminsCount || 0;
       }
-
       setStats({
         totalMessages: totalMessages || 0,
         unreadMessages: unreadMessages || 0,
@@ -140,14 +123,13 @@ const AdminDashboard = () => {
       console.error("Error loading stats:", error);
     }
   };
-
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
       navigate("/");
       toast({
         title: "Success",
-        description: "Signed out successfully",
+        description: "Signed out successfully"
       });
     } catch (error) {
       console.error("Error signing out:", error);
@@ -155,14 +137,27 @@ const AdminDashboard = () => {
   };
 
   // Define menu items
-  const menuItems = [
-    { id: "messages", title: "Messages", icon: MessageSquare },
-    { id: "services", title: "Services", icon: Settings },
-    { id: "testimonials", title: "Testimonials", icon: Star },
-    ...(isSuperAdmin ? [{ id: "admins", title: "Admin Management", icon: Shield }] : []),
-    { id: "profile", title: "Profile", icon: User },
-  ];
-
+  const menuItems = [{
+    id: "messages",
+    title: "Messages",
+    icon: MessageSquare
+  }, {
+    id: "services",
+    title: "Services",
+    icon: Settings
+  }, {
+    id: "testimonials",
+    title: "Testimonials",
+    icon: Star
+  }, ...(isSuperAdmin ? [{
+    id: "admins",
+    title: "Admin Management",
+    icon: Shield
+  }] : []), {
+    id: "profile",
+    title: "Profile",
+    icon: User
+  }];
   const renderContent = () => {
     switch (activeView) {
       case "messages":
@@ -179,40 +174,30 @@ const AdminDashboard = () => {
         return <AdminMessages onStatsUpdate={loadStats} />;
     }
   };
-
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+    return <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <SidebarProvider>
+  return <SidebarProvider>
       <div className="min-h-screen flex w-full">
         {/* Sidebar */}
         <Sidebar className="w-64 border-r">
           <SidebarContent>
             <div className="p-4 border-b">
-              <h2 className="text-lg font-semibold">Admin Panel</h2>
+              <h2 className="text-lg font-semibold">EduReach</h2>
             </div>
             
             <SidebarGroup>
               <SidebarGroupLabel>Navigation</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {menuItems.map((item) => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton
-                        onClick={() => setActiveView(item.id)}
-                        className={activeView === item.id ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}
-                      >
+                  {menuItems.map(item => <SidebarMenuItem key={item.id}>
+                      <SidebarMenuButton onClick={() => setActiveView(item.id)} className={activeView === item.id ? "bg-muted text-primary font-medium" : "hover:bg-muted/50"}>
                         <item.icon className="mr-2 h-4 w-4" />
                         <span>{item.title}</span>
                       </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
+                    </SidebarMenuItem>)}
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
@@ -292,8 +277,7 @@ const AdminDashboard = () => {
                 </CardContent>
               </Card>
 
-              {isSuperAdmin && (
-                <Card>
+              {isSuperAdmin && <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">Admin Users</CardTitle>
                     <Users className="h-4 w-4 text-muted-foreground" />
@@ -301,8 +285,7 @@ const AdminDashboard = () => {
                   <CardContent>
                     <div className="text-2xl font-bold">{stats.totalAdmins}</div>
                   </CardContent>
-                </Card>
-              )}
+                </Card>}
             </div>
 
             {/* Dynamic Content */}
@@ -312,8 +295,6 @@ const AdminDashboard = () => {
           </main>
         </div>
       </div>
-    </SidebarProvider>
-  );
+    </SidebarProvider>;
 };
-
 export default AdminDashboard;
