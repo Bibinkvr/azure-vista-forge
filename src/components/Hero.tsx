@@ -69,54 +69,7 @@ const Hero = () => {
           </div>
 
           {/* Hero Image */}
-          <div className="relative animate-fade-in" style={{
-          animationDelay: "0.3s"
-        }}>
-            <div className="relative z-10">
-              
-            </div>
-            
-            {/* Floating Elements */}
-            <div className="absolute -top-6 -right-6 bg-card shadow-card rounded-2xl p-4 animate-float">
-              <div className="flex items-center space-x-3">
-                <div className="bg-gradient-primary p-2 rounded-lg">
-                  <Users className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <div>
-                  <p className="font-semibold">30+ Years</p>
-                  <p className="text-sm text-muted-foreground">Experience</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute -bottom-6 -left-6 bg-card shadow-card rounded-2xl p-4 animate-float" style={{
-            animationDelay: "1s"
-          }}>
-              <div className="flex items-center space-x-3">
-                <div className="bg-accent p-2 rounded-lg">
-                  <Award className="h-5 w-5 text-accent-foreground" />
-                </div>
-                <div>
-                  <p className="font-semibold">100%</p>
-                  <p className="text-sm text-muted-foreground">Success Rate</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute top-1/2 -right-12 bg-card shadow-card rounded-2xl p-4 animate-float" style={{
-            animationDelay: "2s"
-          }}>
-              <div className="flex items-center space-x-3">
-                <div className="bg-gradient-primary p-2 rounded-lg">
-                  <Globe className="h-5 w-5 text-primary-foreground" />
-                </div>
-                <div>
-                  <p className="font-semibold">50+</p>
-                  <p className="text-sm text-muted-foreground">Countries</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </section>;
