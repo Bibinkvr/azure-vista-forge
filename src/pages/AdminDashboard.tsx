@@ -186,7 +186,7 @@ const AdminDashboard = () => {
         <Sidebar className="w-64 border-r">
           <SidebarContent>
             <div className="p-4 border-b">
-              <img src={logo} alt="Beyond View Finder" className="h-12 w-auto" />
+              <img src={logo} alt="Beyond View Finder" className="h-10 w-auto" />
             </div>
             
             <SidebarGroup>
