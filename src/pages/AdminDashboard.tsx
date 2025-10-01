@@ -13,6 +13,7 @@ import AdminProfile from "@/components/admin/AdminProfile";
 import AdminServices from "@/components/admin/AdminServices";
 import AdminTestimonials from "@/components/admin/AdminTestimonials";
 import AdminManagement from "@/components/admin/AdminManagement";
+import logo from "@/assets/beyondviewfinder-logo.png";
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [adminProfile, setAdminProfile] = useState<any>(null);
@@ -185,7 +186,7 @@ const AdminDashboard = () => {
         <Sidebar className="w-64 border-r">
           <SidebarContent>
             <div className="p-4 border-b">
-              <h2 className="text-lg font-semibold">Beyond View Finder</h2>
+              <img src={logo} alt="Beyond View Finder" className="h-10 w-auto" />
             </div>
             
             <SidebarGroup>
