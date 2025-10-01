@@ -64,7 +64,7 @@ const Testimonials = () => {
       id: "default-1",
       name: "Sarah Johnson",
       role: "MBA Student, Harvard Business School",
-      content: "EduReach made my dream of studying at Harvard a reality. Their expert guidance through the application process was invaluable.",
+      content: "Beyond View Finder made my dream of studying at Harvard a reality. Their expert guidance through the application process was invaluable.",
       rating: 5,
       created_at: "2024-01-01"
     },
@@ -72,7 +72,7 @@ const Testimonials = () => {
       id: "default-2",
       name: "Raj Patel",
       role: "Engineering Student, MIT", 
-      content: "The visa application process seemed overwhelming until I found EduReach. They handled everything professionally and kept me informed at every step.",
+      content: "The visa application process seemed overwhelming until I found Beyond View Finder. They handled everything professionally and kept me informed at every step.",
       rating: 5,
       created_at: "2024-01-02"
     },
@@ -80,7 +80,7 @@ const Testimonials = () => {
       id: "default-3",
       name: "Emily Chen",
       role: "Medical Student, Oxford University",
-      content: "Thanks to EduReach's IELTS training program, I achieved the scores needed for Oxford. Their instructors were patient and knowledgeable.",
+      content: "Thanks to Beyond View Finder's IELTS training program, I achieved the scores needed for Oxford. Their instructors were patient and knowledgeable.",
       rating: 5,
       created_at: "2024-01-03"
     }
@@ -97,7 +97,7 @@ const Testimonials = () => {
               What Our <span className="text-gradient">Students</span> Say
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Don't just take our word for it. Here's what our successful students have to say about their experience with EduReach.
+              Don't just take our word for it. Here's what our successful students have to say about their experience with Beyond View Finder.
             </p>
           </div>
           <div className="flex items-center justify-center">
@@ -117,7 +117,7 @@ const Testimonials = () => {
             What Our <span className="text-gradient">Students</span> Say
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our successful students have to say about their experience with EduReach.
+            Don't just take our word for it. Here's what our successful students have to say about their experience with Beyond View Finder.
           </p>
         </div>
 

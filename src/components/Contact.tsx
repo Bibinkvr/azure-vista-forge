@@ -96,14 +96,14 @@ const Contact = () => {
           <div className="flex items-center justify-center mb-4">
             <Plane className="h-8 w-8 mr-3 animate-glow" />
             <h2 className="text-4xl lg:text-6xl font-bold">
-              EduReach – Bridging Dreams to Global Success!
+              Beyond View Finder – Bridging Dreams to Global Success!
             </h2>
           </div>
           <p className="text-xl text-primary-foreground/90 mb-8 max-w-3xl mx-auto">
             Simplifying Your Journey to Global Education
           </p>
           <p className="text-primary-foreground/80 max-w-4xl mx-auto leading-relaxed">
-            At EduReach, we make studying abroad seamless and stress-free. Whether you need student visa assistance, admission guidance, or test preparation, our team of experts is here to support you at every step. With a high success rate and years of experience, we provide personalized solutions tailored to your academic and career goals.
+            At Beyond View Finder, we make studying abroad seamless and stress-free. Whether you need student visa assistance, admission guidance, or test preparation, our team of experts is here to support you at every step. With a high success rate and years of experience, we provide personalized solutions tailored to your academic and career goals.
           </p>
           <p className="text-xl font-semibold mt-6">
             Your dream university is just one step away. Let us guide you!
@@ -230,7 +230,7 @@ const Contact = () => {
                   </div>
                   <div>
                     <p className="font-semibold">Email</p>
-                    <p className="text-primary-foreground/90">info@edureach.com</p>
+                    <p className="text-primary-foreground/90">info@beyondviewfinder.com</p>
                   </div>
                 </div>
 
@@ -258,7 +258,7 @@ const Contact = () => {
 
             {/* Why Choose Us */}
             <Card className="bg-background/10 backdrop-blur-sm border-primary-foreground/20 shadow-card p-6">
-              <h3 className="text-2xl font-bold mb-6">Why Choose EduReach?</h3>
+              <h3 className="text-2xl font-bold mb-6">Why Choose Beyond View Finder?</h3>
               
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">

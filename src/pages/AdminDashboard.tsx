@@ -185,7 +185,7 @@ const AdminDashboard = () => {
         <Sidebar className="w-64 border-r">
           <SidebarContent>
             <div className="p-4 border-b">
-              <h2 className="text-lg font-semibold">EduReach</h2>
+              <h2 className="text-lg font-semibold">Beyond View Finder</h2>
             </div>
             
             <SidebarGroup>

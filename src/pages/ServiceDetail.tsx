@@ -323,7 +323,7 @@ const ServiceDetail = () => {
                       </div>
                       <div className="flex items-center gap-2 text-sm opacity-90">
                         <Mail className="h-4 w-4" />
-                        <span>info@edureach.com</span>
+                        <span>info@beyondviewfinder.com</span>
                       </div>
                     </div>
                   </Card>
