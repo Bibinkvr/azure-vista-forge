@@ -82,13 +82,14 @@ const Header = () => {
     label: "Contact",
     href: "#contact"
   }];
-  return <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-card">
-      <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center space-x-3">
-            <img src={logo} alt="Beyond View Finder" className="h-10 w-auto" />
-          </div>
+  return <header className="fixed top-4 left-4 right-4 z-50">
+      <div className="bg-background/40 backdrop-blur-md border border-border/50 rounded-2xl shadow-elegant">
+        <div className="container mx-auto px-6 lg:px-8">
+          <div className="flex items-center justify-between h-20">
+            {/* Logo */}
+            <div className="flex items-center space-x-3">
+              <img src={logo} alt="Beyond View Finder" className="h-16 w-auto" />
+            </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
@@ -128,7 +129,7 @@ const Header = () => {
         </div>
 
         {/* Mobile Navigation */}
-        {isMenuOpen && <div className="md:hidden py-4 border-t border-border animate-fade-in">
+        {isMenuOpen && <div className="md:hidden py-4 border-t border-border/50 animate-fade-in">
             <nav className="flex flex-col space-y-4">
               {navItems.map(item => <a key={item.label} href={item.href} className="text-foreground hover:text-primary transition-smooth px-4 py-2 rounded-lg hover:bg-secondary" onClick={() => setIsMenuOpen(false)}>
                   {item.label}
@@ -157,6 +158,7 @@ const Header = () => {
               </div>
             </nav>
           </div>}
+        </div>
       </div>
     </header>;
 };
