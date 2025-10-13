@@ -4,6 +4,8 @@ import { ArrowRight, Users, Award, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import TrackableAirplane from "./TrackableAirplane";
 import heroStudentsImage from "@/assets/hero-students.png";
+import studyAbroadImage from "@/assets/study-abroad-hero.jpg";
+
 const Hero = () => {
   const navigate = useNavigate();
   return <section id="home" className="min-h-screen pt-16 relative overflow-hidden">
@@ -69,7 +71,19 @@ const Hero = () => {
           </div>
 
           {/* Hero Image */}
-          
+          <div className="relative animate-fade-in">
+            <div className="relative rounded-2xl overflow-hidden shadow-elegant">
+              <img 
+                src={studyAbroadImage} 
+                alt="International students studying abroad" 
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/20 to-transparent"></div>
+            </div>
+            {/* Decorative elements */}
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-primary/20 rounded-full blur-2xl"></div>
+            <div className="absolute -bottom-4 -left-4 w-32 h-32 bg-accent/20 rounded-full blur-2xl"></div>
+          </div>
         </div>
       </div>
     </section>;
