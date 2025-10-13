@@ -62,19 +62,42 @@ const ServiceDetail = () => {
 
   const loadService = async () => {
     try {
-      const { data, error } = await supabase
+      // Try to load from program_images first
+      const { data: programData, error: programError } = await supabase
+        .from("program_images")
+        .select("*")
+        .eq("id", id)
+        .maybeSingle();
+
+      if (programData) {
+        setService({
+          ...programData,
+          isProgram: true
+        });
+        setEditData({
+          title: programData.title,
+          description: programData.description || "",
+          icon: "Image"
+        });
+        setLoading(false);
+        return;
+      }
+
+      // If not found, try services table
+      const { data: serviceData, error: serviceError } = await supabase
         .from("services")
         .select("*")
         .eq("id", id)
-        .single(); // Remove is_active filter for admins
+        .maybeSingle();
 
-      if (error) throw error;
-      setService(data);
-      setEditData({
-        title: data.title,
-        description: data.description,
-        icon: data.icon
-      });
+      if (serviceData) {
+        setService(serviceData);
+        setEditData({
+          title: serviceData.title,
+          description: serviceData.description,
+          icon: serviceData.icon
+        });
+      }
     } catch (error) {
       console.error("Error loading service:", error);
     } finally {
@@ -177,15 +200,27 @@ const ServiceDetail = () => {
                 className="mb-8 group"
               >
                 <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
-                Back to Services
+                Back to Home
               </Button>
+
+              {service.isProgram && service.image_url && (
+                <div className="mb-8 rounded-2xl overflow-hidden shadow-elegant">
+                  <img 
+                    src={service.image_url} 
+                    alt={service.title}
+                    className="w-full h-96 object-cover"
+                  />
+                </div>
+              )}
               
               <div className="flex items-center justify-between gap-6 mb-8">
-                <div className="flex items-center gap-6">
-                  <div className="bg-gradient-primary p-6 rounded-2xl shadow-glow">
-                    <Icon className="h-12 w-12 text-primary-foreground" />
-                  </div>
-                  <div>
+                <div className={service.isProgram ? "w-full" : "flex items-center gap-6"}>
+                  {!service.isProgram && (
+                    <div className="bg-gradient-primary p-6 rounded-2xl shadow-glow">
+                      <Icon className="h-12 w-12 text-primary-foreground" />
+                    </div>
+                  )}
+                  <div className="flex-1">
                     {editMode ? (
                       <div className="space-y-4">
                         <Input
@@ -194,7 +229,7 @@ const ServiceDetail = () => {
                           className="text-4xl lg:text-5xl font-bold bg-transparent border-2 border-primary"
                         />
                         <p className="text-xl text-muted-foreground">
-                          Professional guidance for your educational journey
+                          {service.isProgram ? "Study abroad program opportunity" : "Professional guidance for your educational journey"}
                         </p>
                       </div>
                     ) : (
@@ -203,7 +238,7 @@ const ServiceDetail = () => {
                           {service.title}
                         </h1>
                         <p className="text-xl text-muted-foreground">
-                          Professional guidance for your educational journey
+                          {service.isProgram ? "Study abroad program opportunity" : "Professional guidance for your educational journey"}
                         </p>
                       </>
                     )}
@@ -245,8 +280,8 @@ const ServiceDetail = () => {
                 <div className="lg:col-span-2 space-y-8">
                   <Card className="p-8 shadow-elegant">
                     <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-bold">Service Overview</h2>
-                      {isAdmin && editMode && (
+                      <h2 className="text-2xl font-bold">{service.isProgram ? "Program Details" : "Service Overview"}</h2>
+                      {isAdmin && editMode && !service.isProgram && (
                         <Select value={editData.icon} onValueChange={(value) => setEditData({...editData, icon: value})}>
                           <SelectTrigger className="w-40">
                             <SelectValue placeholder="Select icon" />
@@ -267,11 +302,11 @@ const ServiceDetail = () => {
                         value={editData.description}
                         onChange={(e) => setEditData({...editData, description: e.target.value})}
                         className="text-lg leading-relaxed mb-8 min-h-32"
-                        placeholder="Enter service description..."
+                        placeholder={service.isProgram ? "Enter program details..." : "Enter service description..."}
                       />
                     ) : (
                       <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                        {service.description}
+                        {service.description || "Contact us for more information about this program."}
                       </p>
                     )}
                     

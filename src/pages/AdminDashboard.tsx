@@ -6,13 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, MessageSquare, Settings, Star, User, Mail, Phone, Calendar, TrendingUp, Users, Eye, Edit, Trash2, Plus, Shield } from "lucide-react";
+import { LogOut, MessageSquare, Settings, Star, User, Mail, Phone, Calendar, TrendingUp, Users, Eye, Edit, Trash2, Plus, Shield, Image } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminProfile from "@/components/admin/AdminProfile";
 import AdminServices from "@/components/admin/AdminServices";
 import AdminTestimonials from "@/components/admin/AdminTestimonials";
 import AdminManagement from "@/components/admin/AdminManagement";
+import AdminProgramImages from "@/components/admin/AdminProgramImages";
 import logo from "@/assets/beyondviewfinder-logo.png";
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,8 @@ const AdminDashboard = () => {
     unreadMessages: 0,
     totalServices: 0,
     totalTestimonials: 0,
-    totalAdmins: 0
+    totalAdmins: 0,
+    totalPrograms: 0
   });
   const navigate = useNavigate();
   const {
@@ -102,6 +104,14 @@ const AdminDashboard = () => {
         head: true
       });
 
+      // Get program images count
+      const {
+        count: totalPrograms
+      } = await supabase.from("program_images").select("*", {
+        count: "exact",
+        head: true
+      });
+
       // Get admins count (only for super admin)
       let totalAdmins = 0;
       if (adminProfile?.is_super_admin) {
@@ -118,7 +128,8 @@ const AdminDashboard = () => {
         unreadMessages: unreadMessages || 0,
         totalServices: totalServices || 0,
         totalTestimonials: totalTestimonials || 0,
-        totalAdmins
+        totalAdmins,
+        totalPrograms: totalPrograms || 0
       });
     } catch (error) {
       console.error("Error loading stats:", error);
@@ -143,6 +154,10 @@ const AdminDashboard = () => {
     title: "Messages",
     icon: MessageSquare
   }, {
+    id: "programs",
+    title: "Program Images",
+    icon: Image
+  }, {
     id: "services",
     title: "Services",
     icon: Settings
@@ -163,6 +178,8 @@ const AdminDashboard = () => {
     switch (activeView) {
       case "messages":
         return <AdminMessages onStatsUpdate={loadStats} />;
+      case "programs":
+        return <AdminProgramImages onStatsUpdate={loadStats} />;
       case "services":
         return <AdminServices onStatsUpdate={loadStats} />;
       case "testimonials":
@@ -237,7 +254,7 @@ const AdminDashboard = () => {
           {/* Main Content Area */}
           <main className="flex-1 p-6 overflow-auto">
             {/* Stats Cards */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${isSuperAdmin ? '5' : '4'} gap-6 mb-8`}>
+            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${isSuperAdmin ? '6' : '5'} gap-6 mb-8`}>
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Total Messages</CardTitle>
@@ -255,6 +272,16 @@ const AdminDashboard = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-primary">{stats.unreadMessages}</div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Program Images</CardTitle>
+                  <Image className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{stats.totalPrograms}</div>
                 </CardContent>
               </Card>
 
