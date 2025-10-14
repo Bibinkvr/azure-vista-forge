@@ -10,6 +10,7 @@ import UserProfile from "./pages/UserProfile";
 import AdminDashboard from "./pages/AdminDashboard";
 import ServiceDetail from "./pages/ServiceDetail";
 import NotFound from "./pages/NotFound";
+import TrackableAirplane from "./components/TrackableAirplane";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
+        <TrackableAirplane />
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
