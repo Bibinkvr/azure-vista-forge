@@ -91,9 +91,9 @@ const Services = () => {
               Array.from({ length: 6 }).map((_, index) => (
                 <Card 
                   key={index}
-                  className={`bg-gradient-card shadow-card animate-pulse ${programs.length > 6 ? 'flex-shrink-0 w-80 snap-start' : ''}`}
+                  className={`bg-gradient-card shadow-card animate-pulse ${programs.length > 6 ? 'flex-shrink-0 w-72 sm:w-80 snap-start' : ''}`}
                 >
-                  <div className="h-64 bg-muted rounded-t-lg"></div>
+                  <div className="h-48 sm:h-56 md:h-64 bg-muted rounded-t-lg"></div>
                   <div className="p-4">
                     <div className="h-6 bg-muted rounded mb-3"></div>
                     <div className="h-10 bg-muted rounded"></div>
@@ -104,16 +104,15 @@ const Services = () => {
               programs.map((program, index) => (
                 <Card 
                   key={program.id}
-                  className={`bg-gradient-card shadow-card hover:shadow-elegant transition-smooth group hover:-translate-y-2 animate-fade-in overflow-hidden ${programs.length > 6 ? 'flex-shrink-0 w-80 snap-start' : ''}`}
+                  className={`bg-gradient-card shadow-card hover:shadow-elegant transition-smooth group hover:-translate-y-2 animate-fade-in overflow-hidden ${programs.length > 6 ? 'flex-shrink-0 w-72 sm:w-80 snap-start' : ''}`}
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden bg-muted">
                     <img 
                       src={program.image_url} 
                       alt={program.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-smooth duration-500"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-smooth duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent"></div>
                   </div>
                   
                   <div className="p-4">
