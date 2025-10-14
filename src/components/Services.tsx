@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import consultationBg from "@/assets/consultation-bg.jpg";
 
 const Services = () => {
   const navigate = useNavigate();
@@ -141,20 +142,27 @@ const Services = () => {
 
         {/* CTA Section */}
         <div className="text-center mt-16 animate-slide-up" style={{ animationDelay: "0.6s" }}>
-          <Card className="bg-gradient-hero text-primary-foreground p-8 shadow-elegant">
-            <h3 className="text-2xl font-bold mb-4">
-              Ready to Start Your Journey?
-            </h3>
-            <p className="text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
-              Get personalized guidance from our expert consultants and take the first step towards your global education dreams.
-            </p>
-            <Button 
-              size="lg" 
-              variant="secondary"
-              className="bg-background text-foreground hover:bg-secondary hover:shadow-glow transition-smooth"
-            >
-              Book Free Consultation
-            </Button>
+          <Card className="relative overflow-hidden text-primary-foreground p-8 shadow-elegant">
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: `url(${consultationBg})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60" />
+            <div className="relative z-10">
+              <h3 className="text-2xl font-bold mb-4">
+                Ready to Start Your Journey?
+              </h3>
+              <p className="text-primary-foreground/90 mb-6 max-w-2xl mx-auto">
+                Get personalized guidance from our expert consultants and take the first step towards your global education dreams.
+              </p>
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="bg-background text-foreground hover:bg-secondary hover:shadow-glow transition-smooth"
+              >
+                Book Free Consultation
+              </Button>
+            </div>
           </Card>
         </div>
       </div>
