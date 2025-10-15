@@ -103,7 +103,7 @@ const Testimonials = () => {
               </div>
             </div>
             
-            <h2 className="text-4xl lg:text-5xl mb-6 leading-tight font-semibold text-[#29ff03] text-center">
+            <h2 className="text-4xl mb-6 leading-tight text-[#29ff03] font-extrabold text-left lg:text-3xl">
               What say peoples<br />about us
             </h2>
             
