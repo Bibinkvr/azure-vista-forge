@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import consultationBg from "@/assets/consultation-bg.jpg";
 
 const Services = () => {
   const navigate = useNavigate();
   const [programs, setPrograms] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
     loadPrograms();
@@ -33,18 +32,6 @@ const Services = () => {
     }
   };
 
-  const scroll = (direction: 'left' | 'right') => {
-    const container = document.getElementById('programs-scroll');
-    if (container) {
-      const scrollAmount = 400;
-      const newPosition = direction === 'left' 
-        ? scrollPosition - scrollAmount 
-        : scrollPosition + scrollAmount;
-      
-      container.scrollTo({ left: newPosition, behavior: 'smooth' });
-      setScrollPosition(newPosition);
-    }
-  };
 
   return (
     <section id="services" className="py-20 bg-secondary/30">
@@ -59,84 +46,53 @@ const Services = () => {
           </p>
         </div>
 
-        {/* Programs Grid/Scroll */}
-        <div className="relative">
-          {programs.length > 6 && (
-            <>
-              <button
-                onClick={() => scroll('left')}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-background transition-smooth"
-                aria-label="Scroll left"
+        {/* Programs Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
+          {loading ? (
+            Array.from({ length: 8 }).map((_, index) => (
+              <Card 
+                key={index}
+                className="bg-gradient-card shadow-card animate-pulse overflow-hidden"
               >
-                <ChevronLeft className="h-6 w-6" />
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-background/80 backdrop-blur-sm p-2 rounded-full shadow-lg hover:bg-background transition-smooth"
-                aria-label="Scroll right"
+                <div className="aspect-[4/3] bg-muted"></div>
+                <div className="p-4">
+                  <div className="h-10 bg-muted rounded"></div>
+                </div>
+              </Card>
+            ))
+          ) : programs.length > 0 ? (
+            programs.map((program, index) => (
+              <Card 
+                key={program.id}
+                className="bg-gradient-card shadow-card hover:shadow-elegant transition-smooth group hover:-translate-y-1 animate-fade-in overflow-hidden"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <ChevronRight className="h-6 w-6" />
-              </button>
-            </>
+                <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                  <img 
+                    src={program.image_url} 
+                    alt={program.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-smooth duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
+                </div>
+                
+                <div className="p-4">
+                  <Button 
+                    variant="outline" 
+                    className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-smooth"
+                    onClick={() => navigate(`/service/${program.id}`)}
+                  >
+                    View Details
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              </Card>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className="text-muted-foreground">No programs available at the moment.</p>
+            </div>
           )}
-
-          <div 
-            id="programs-scroll"
-            className={programs.length > 6 
-              ? "flex overflow-x-auto gap-6 pb-4 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent snap-x snap-mandatory" 
-              : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-            }
-          >
-            {loading ? (
-              Array.from({ length: 6 }).map((_, index) => (
-                <Card 
-                  key={index}
-                  className={`bg-gradient-card shadow-card animate-pulse ${programs.length > 6 ? 'flex-shrink-0 w-72 sm:w-80 snap-start' : ''}`}
-                >
-                  <div className="h-48 sm:h-56 md:h-64 bg-muted rounded-t-lg"></div>
-                  <div className="p-4">
-                    <div className="h-6 bg-muted rounded mb-3"></div>
-                    <div className="h-10 bg-muted rounded"></div>
-                  </div>
-                </Card>
-              ))
-            ) : programs.length > 0 ? (
-              programs.map((program, index) => (
-                <Card 
-                  key={program.id}
-                  className={`bg-gradient-card shadow-card hover:shadow-elegant transition-smooth group hover:-translate-y-2 animate-fade-in overflow-hidden ${programs.length > 6 ? 'flex-shrink-0 w-72 sm:w-80 snap-start' : ''}`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden bg-muted">
-                    <img 
-                      src={program.image_url} 
-                      alt={program.title}
-                      className="w-full h-full object-contain group-hover:scale-105 transition-smooth duration-500"
-                    />
-                  </div>
-                  
-                  <div className="p-4">
-                    <h3 className="text-lg font-semibold mb-3 line-clamp-2">
-                      {program.title}
-                    </h3>
-                    
-                    <Button 
-                      variant="outline" 
-                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-smooth"
-                      onClick={() => navigate(`/service/${program.id}`)}
-                    >
-                      View More Details
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-                </Card>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className="text-muted-foreground">No programs available at the moment.</p>
-              </div>
-            )}
-          </div>
         </div>
 
         {/* CTA Section */}
