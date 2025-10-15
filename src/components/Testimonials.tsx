@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
-import { Star, Quote } from "lucide-react";
+import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import useEmblaCarousel from "embla-carousel-react";
 
 interface Testimonial {
   id: string;
@@ -16,6 +18,7 @@ interface Testimonial {
 const Testimonials = () => {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "start" });
 
   useEffect(() => {
     loadTestimonials();
@@ -49,11 +52,14 @@ const Testimonials = () => {
     }
   };
 
+  const scrollPrev = () => emblaApi?.scrollPrev();
+  const scrollNext = () => emblaApi?.scrollNext();
+
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
       <Star
         key={index}
-        className={`h-4 w-4 ${index < rating ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground"}`}
+        className={`h-5 w-5 ${index < rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"}`}
       />
     ));
   };
@@ -90,16 +96,8 @@ const Testimonials = () => {
 
   if (loading) {
     return (
-      <section id="testimonials" className="py-20">
+      <section id="testimonials" className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="container mx-auto px-4 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-              What Our <span className="text-gradient">Students</span> Say
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Don't just take our word for it. Here's what our successful students have to say about their experience with Beyond View Finder.
-            </p>
-          </div>
           <div className="flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </div>
@@ -109,67 +107,110 @@ const Testimonials = () => {
   }
 
   return (
-    <section id="testimonials" className="py-20">
+    <section id="testimonials" className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="container mx-auto px-4 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center mb-16 animate-slide-up">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-            What Our <span className="text-gradient">Students</span> Say
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Don't just take our word for it. Here's what our successful students have to say about their experience with Beyond View Finder.
-          </p>
-        </div>
-
-        {/* Testimonials Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {displayTestimonials.map((testimonial, index) => (
-            <Card 
-              key={testimonial.id}
-              className="bg-gradient-card shadow-card hover:shadow-elegant transition-smooth p-6 relative animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Quote Icon */}
-              <div className="absolute top-4 right-4 text-primary/20">
-                <Quote className="h-8 w-8" />
-              </div>
-
-              {/* Student Info */}
-              <div className="flex items-center space-x-4 mb-4">
-                {testimonial.avatar_url ? (
-                  <img 
-                    src={testimonial.avatar_url} 
-                    alt={testimonial.name}
-                    className="w-12 h-12 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-sm">
-                      {testimonial.name.charAt(0)}
-                    </span>
-                  </div>
-                )}
-                <div>
-                  <h4 className="font-semibold">{testimonial.name}</h4>
-                  <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          {/* Left Content */}
+          <div className="lg:col-span-4 text-white">
+            <div className="inline-block mb-6">
+              <div className="relative">
+                <span className="text-sm font-bold tracking-wider border-2 border-white px-6 py-2 inline-block">
+                  TESTIMONIALS
+                </span>
+                <div className="absolute -top-2 -right-2 w-4 h-4">
+                  <div className="w-full h-full bg-primary rotate-45"></div>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-primary"></div>
                 </div>
               </div>
+            </div>
+            
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+              What say peoples<br />about us
+            </h2>
+            
+            <p className="text-lg text-white/80 mb-8 leading-relaxed">
+              We strongly support best practice sharing across our operations around the world and across various sectors.
+            </p>
+            
+            {/* Navigation Arrows */}
+            <div className="flex gap-4">
+              <Button
+                onClick={scrollPrev}
+                variant="outline"
+                size="icon"
+                className="rounded-full w-14 h-14 border-2 border-white bg-transparent hover:bg-white hover:text-slate-900 text-white transition-smooth"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </Button>
+              <Button
+                onClick={scrollNext}
+                variant="outline"
+                size="icon"
+                className="rounded-full w-14 h-14 border-2 border-white bg-transparent hover:bg-white hover:text-slate-900 text-white transition-smooth"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </Button>
+            </div>
+          </div>
 
-              {/* Rating */}
-              <div className="flex items-center space-x-1 mb-4">
-                {renderStars(testimonial.rating)}
-              </div>
+          {/* Right - Carousel */}
+          <div className="lg:col-span-8 overflow-hidden" ref={emblaRef}>
+            <div className="flex gap-6">
+              {displayTestimonials.map((testimonial) => (
+                <div key={testimonial.id} className="flex-[0_0_100%] min-w-0 md:flex-[0_0_50%] lg:flex-[0_0_45%]">
+                  <Card className="bg-white p-8 relative h-full flex flex-col">
+                    {/* Avatar with Border */}
+                    <div className="flex justify-center mb-6 -mt-16">
+                      {testimonial.avatar_url ? (
+                        <div className="relative">
+                          <div className="absolute inset-0 rounded-full border-4 border-primary"></div>
+                          <img 
+                            src={testimonial.avatar_url} 
+                            alt={testimonial.name}
+                            className="w-24 h-24 rounded-full object-cover border-4 border-white"
+                          />
+                        </div>
+                      ) : (
+                        <div className="relative">
+                          <div className="absolute inset-0 rounded-full border-4 border-primary"></div>
+                          <div className="w-24 h-24 bg-gradient-primary rounded-full flex items-center justify-center border-4 border-white">
+                            <span className="text-primary-foreground font-bold text-2xl">
+                              {testimonial.name.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
 
-              {/* Testimonial Text */}
-              <p className="text-muted-foreground leading-relaxed text-sm">
-                "{testimonial.content}"
-              </p>
-            </Card>
-          ))}
+                    {/* Title */}
+                    <h3 className="text-xl font-bold text-center mb-4 text-slate-900">
+                      Great Service
+                    </h3>
+
+                    {/* Rating */}
+                    <div className="flex items-center justify-center gap-1 mb-6">
+                      {renderStars(testimonial.rating)}
+                    </div>
+
+                    {/* Testimonial Text */}
+                    <p className="text-slate-600 text-center leading-relaxed mb-6 flex-grow">
+                      {testimonial.content}
+                    </p>
+
+                    {/* Name and Role */}
+                    <div className="text-center border-t pt-4">
+                      <h4 className="font-bold text-lg text-slate-900 mb-1">{testimonial.name}</h4>
+                      <p className="text-sm text-primary font-medium">{testimonial.role}</p>
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Trust Metrics */}
-        <div className="mt-16 animate-slide-up" style={{ animationDelay: "0.6s" }}>
+        <div className="mt-20">
           <Card className="bg-gradient-hero text-primary-foreground p-8 shadow-elegant">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
               <div>
