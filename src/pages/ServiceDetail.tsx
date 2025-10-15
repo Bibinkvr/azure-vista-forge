@@ -191,62 +191,41 @@ const ServiceDetail = () => {
       
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="py-20 bg-gradient-to-br from-primary/10 to-accent/10">
+        <section className="py-12 bg-gradient-to-br from-primary/5 to-accent/5">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <Button 
-                onClick={() => navigate("/")} 
-                variant="outline" 
-                className="mb-8 group"
-              >
-                <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
-                Back to Home
-              </Button>
+            <Button 
+              onClick={() => navigate("/")} 
+              variant="outline" 
+              className="mb-8 group"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-smooth" />
+              Back to Home
+            </Button>
 
-              {service.isProgram && service.image_url && (
-                <div className="mb-8 rounded-2xl overflow-hidden shadow-elegant">
-                  <img 
-                    src={service.image_url} 
-                    alt={service.title}
-                    className="w-full h-96 object-cover"
-                  />
-                </div>
-              )}
-              
-              <div className="flex items-center justify-between gap-6 mb-8">
-                <div className={service.isProgram ? "w-full" : "flex items-center gap-6"}>
-                  {!service.isProgram && (
-                    <div className="bg-gradient-primary p-6 rounded-2xl shadow-glow">
-                      <Icon className="h-12 w-12 text-primary-foreground" />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    {editMode ? (
-                      <div className="space-y-4">
-                        <Input
-                          value={editData.title}
-                          onChange={(e) => setEditData({...editData, title: e.target.value})}
-                          className="text-4xl lg:text-5xl font-bold bg-transparent border-2 border-primary"
-                        />
-                        <p className="text-xl text-muted-foreground">
-                          {service.isProgram ? "Study abroad program opportunity" : "Professional guidance for your educational journey"}
-                        </p>
-                      </div>
-                    ) : (
-                      <>
-                        <h1 className="text-4xl lg:text-5xl font-bold mb-4">
-                          {service.title}
-                        </h1>
-                        <p className="text-xl text-muted-foreground">
-                          {service.isProgram ? "Study abroad program opportunity" : "Professional guidance for your educational journey"}
-                        </p>
-                      </>
-                    )}
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* Left Side - Image */}
+              {service.isProgram && service.image_url ? (
+                <div className="order-2 lg:order-1">
+                  <div className="rounded-xl overflow-hidden shadow-elegant h-full">
+                    <img 
+                      src={service.image_url} 
+                      alt={service.title}
+                      className="w-full h-full object-cover min-h-[400px] lg:min-h-[500px]"
+                    />
                   </div>
                 </div>
-                
+              ) : (
+                <div className="order-2 lg:order-1 flex items-center justify-center">
+                  <div className="bg-gradient-primary p-12 rounded-2xl shadow-glow">
+                    <Icon className="h-32 w-32 text-primary-foreground" />
+                  </div>
+                </div>
+              )}
+
+              {/* Right Side - Content */}
+              <div className="order-1 lg:order-2 space-y-6">
                 {isAdmin && (
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 justify-end">
                     {editMode ? (
                       <>
                         <Button onClick={handleSave} size="sm" className="bg-green-600 hover:bg-green-700">
@@ -266,126 +245,136 @@ const ServiceDetail = () => {
                     )}
                   </div>
                 )}
+
+                {editMode ? (
+                  <div className="space-y-4">
+                    <Input
+                      value={editData.title}
+                      onChange={(e) => setEditData({...editData, title: e.target.value})}
+                      className="text-3xl lg:text-4xl font-bold bg-transparent border-2 border-primary"
+                    />
+                    <Textarea
+                      value={editData.description}
+                      onChange={(e) => setEditData({...editData, description: e.target.value})}
+                      className="text-lg leading-relaxed min-h-32"
+                      placeholder={service.isProgram ? "Enter program details..." : "Enter service description..."}
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div>
+                      <h1 className="text-3xl lg:text-5xl font-bold mb-4 leading-tight">
+                        {service.title}
+                      </h1>
+                      <p className="text-lg text-muted-foreground leading-relaxed">
+                        {service.description || "Contact us for more information about this program."}
+                      </p>
+                    </div>
+
+                    <div className="space-y-4 pt-4">
+                      <div className="flex items-start gap-3">
+                        <div className="bg-primary/20 p-2 rounded-lg mt-1">
+                          <FileCheck className="h-5 w-5 text-primary" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-lg">Expert Guidance</h4>
+                          <p className="text-muted-foreground">Professional consultants with years of experience</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="bg-accent/20 p-2 rounded-lg mt-1">
+                          <Users className="h-5 w-5 text-accent" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-lg">Personalized Support</h4>
+                          <p className="text-muted-foreground">Tailored solutions for your specific needs</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <div className="bg-green-500/20 p-2 rounded-lg mt-1">
+                          <GraduationCap className="h-5 w-5 text-green-600" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-lg">Proven Success</h4>
+                          <p className="text-muted-foreground">98% success rate with our students</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="pt-6">
+                      <Button 
+                        size="lg"
+                        className="w-full sm:w-auto"
+                        onClick={() => navigate("/auth")}
+                      >
+                        Book Free Consultation
+                      </Button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </section>
 
-        {/* Content Section */}
-        <section className="py-20">
+        {/* Additional Info Section */}
+        <section className="py-16 bg-background">
           <div className="container mx-auto px-4 lg:px-8">
-            <div className="max-w-4xl mx-auto">
-              <div className="grid lg:grid-cols-3 gap-12">
-                {/* Main Content */}
-                <div className="lg:col-span-2 space-y-8">
-                  <Card className="p-8 shadow-elegant">
-                    <div className="flex items-center justify-between mb-6">
-                      <h2 className="text-2xl font-bold">{service.isProgram ? "Program Details" : "Service Overview"}</h2>
-                      {isAdmin && editMode && !service.isProgram && (
-                        <Select value={editData.icon} onValueChange={(value) => setEditData({...editData, icon: value})}>
-                          <SelectTrigger className="w-40">
-                            <SelectValue placeholder="Select icon" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {availableIcons.map((iconName) => (
-                              <SelectItem key={iconName} value={iconName}>
-                                {iconName}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      )}
-                    </div>
-                    
-                    {editMode ? (
-                      <Textarea
-                        value={editData.description}
-                        onChange={(e) => setEditData({...editData, description: e.target.value})}
-                        className="text-lg leading-relaxed mb-8 min-h-32"
-                        placeholder={service.isProgram ? "Enter program details..." : "Enter service description..."}
-                      />
-                    ) : (
-                      <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                        {service.description || "Contact us for more information about this program."}
-                      </p>
-                    )}
-                    
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-xl font-semibold mb-4">What We Offer</h3>
-                        <div className="grid md:grid-cols-2 gap-4">
-                          <div className="flex items-start gap-3">
-                            <div className="bg-primary/20 p-2 rounded-lg mt-1">
-                              <FileCheck className="h-4 w-4 text-primary" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold">Expert Guidance</h4>
-                              <p className="text-sm text-muted-foreground">Professional consultants with years of experience</p>
-                            </div>
-                          </div>
-                          <div className="flex items-start gap-3">
-                            <div className="bg-accent/20 p-2 rounded-lg mt-1">
-                              <Users className="h-4 w-4 text-accent" />
-                            </div>
-                            <div>
-                              <h4 className="font-semibold">Personalized Support</h4>
-                              <p className="text-sm text-muted-foreground">Tailored solutions for your specific needs</p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                </div>
+            <div className="max-w-6xl mx-auto">
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="p-6 text-center shadow-card hover:shadow-elegant transition-smooth">
+                  <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-primary-foreground font-bold">1</span>
+                  </div>
+                  <h3 className="font-semibold mb-2">20+ Years Experience</h3>
+                  <p className="text-sm text-muted-foreground">Trusted expertise in education consulting</p>
+                </Card>
+                
+                <Card className="p-6 text-center shadow-card hover:shadow-elegant transition-smooth">
+                  <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-primary-foreground font-bold">2</span>
+                  </div>
+                  <h3 className="font-semibold mb-2">Global Network</h3>
+                  <p className="text-sm text-muted-foreground">Partnerships with top institutions worldwide</p>
+                </Card>
+                
+                <Card className="p-6 text-center shadow-card hover:shadow-elegant transition-smooth">
+                  <div className="w-12 h-12 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-primary-foreground font-bold">3</span>
+                  </div>
+                  <h3 className="font-semibold mb-2">98% Success Rate</h3>
+                  <p className="text-sm text-muted-foreground">Proven track record of successful placements</p>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                {/* Sidebar */}
-                <div className="space-y-6">
-                  <Card className="p-6 shadow-elegant bg-gradient-hero text-primary-foreground">
-                    <h3 className="text-xl font-bold mb-4">Ready to Get Started?</h3>
-                    <p className="mb-6 opacity-90">
-                      Contact us today for a free consultation and take the first step towards your dreams.
-                    </p>
-                    <div className="space-y-3">
-                      <Button 
-                        className="w-full bg-background text-foreground hover:bg-secondary"
-                        onClick={() => navigate("/auth")}
-                      >
-                        Book Consultation
-                      </Button>
-                      <div className="flex items-center gap-2 text-sm opacity-90">
-                        <Phone className="h-4 w-4" />
-                        <span>+1-555-EDUCATION</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm opacity-90">
-                        <Mail className="h-4 w-4" />
-                        <span>info@beyondviewfinder.com</span>
-                      </div>
-                    </div>
-                  </Card>
-
-                  <Card className="p-6 shadow-elegant">
-                    <h3 className="text-lg font-semibold mb-4">Why Choose Us?</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                          <span className="text-primary-foreground font-bold text-sm">1</span>
-                        </div>
-                        <span className="text-sm">20+ Years Experience</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                          <span className="text-primary-foreground font-bold text-sm">2</span>
-                        </div>
-                        <span className="text-sm">100% Success Rate</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 bg-gradient-primary rounded-full flex items-center justify-center">
-                          <span className="text-primary-foreground font-bold text-sm">3</span>
-                        </div>
-                        <span className="text-sm">Global Network</span>
-                      </div>
-                    </div>
-                  </Card>
+        {/* CTA Section */}
+        <section className="py-16 bg-gradient-hero">
+          <div className="container mx-auto px-4 lg:px-8">
+            <div className="max-w-3xl mx-auto text-center text-primary-foreground">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-4">Ready to Start Your Journey?</h2>
+              <p className="text-lg mb-8 opacity-90">
+                Contact us today for a free consultation and take the first step towards achieving your educational dreams.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button 
+                  size="lg"
+                  className="bg-background text-foreground hover:bg-secondary w-full sm:w-auto"
+                  onClick={() => navigate("/auth")}
+                >
+                  Book Free Consultation
+                </Button>
+                <div className="flex flex-col sm:flex-row gap-4 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Phone className="h-4 w-4" />
+                    <span>+1-555-EDUCATION</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Mail className="h-4 w-4" />
+                    <span>info@beyondviewfinder.com</span>
+                  </div>
                 </div>
               </div>
             </div>
