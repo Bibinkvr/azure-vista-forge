@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, MessageSquare, Settings, Star, User, Mail, Phone, Calendar, TrendingUp, Users, Eye, Edit, Trash2, Plus, Shield, Image } from "lucide-react";
+import { LogOut, MessageSquare, Settings, Star, User, Mail, Phone, Calendar, TrendingUp, Users, Eye, Edit, Trash2, Plus, Shield, Image, FileText } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import AdminMessages from "@/components/admin/AdminMessages";
 import AdminProfile from "@/components/admin/AdminProfile";
@@ -14,6 +15,7 @@ import AdminServices from "@/components/admin/AdminServices";
 import AdminTestimonials from "@/components/admin/AdminTestimonials";
 import AdminManagement from "@/components/admin/AdminManagement";
 import AdminProgramImages from "@/components/admin/AdminProgramImages";
+import AdminBlogPosts from "@/components/admin/AdminBlogPosts";
 import logo from "@/assets/beyondviewfinder-logo.png";
 const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -165,6 +167,10 @@ const AdminDashboard = () => {
     id: "testimonials",
     title: "Testimonials",
     icon: Star
+  }, {
+    id: "blog",
+    title: "Blog Posts",
+    icon: FileText
   }, ...(isSuperAdmin ? [{
     id: "admins",
     title: "Admin Management",
@@ -184,6 +190,8 @@ const AdminDashboard = () => {
         return <AdminServices onStatsUpdate={loadStats} />;
       case "testimonials":
         return <AdminTestimonials onStatsUpdate={loadStats} />;
+      case "blog":
+        return <AdminBlogPosts onStatsUpdate={loadStats} />;
       case "admins":
         return isSuperAdmin ? <AdminManagement /> : null;
       case "profile":
@@ -228,25 +236,37 @@ const AdminDashboard = () => {
           <header className="border-b bg-card h-16 flex items-center px-4">
             <SidebarTrigger className="mr-4" />
             <div className="flex items-center justify-between w-full">
-              <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+              <h1 className="text-2xl font-bold hidden md:block">Admin Dashboard</h1>
               
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2">
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={adminProfile?.avatar_url} />
-                    <AvatarFallback>
-                      {adminProfile?.name?.charAt(0) || "A"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm font-medium">{adminProfile?.name}</span>
-                </div>
-                <Button variant="outline" size="sm" onClick={() => navigate("/")}>
+              <div className="flex items-center space-x-2 md:space-x-4 ml-auto">
+                <Button variant="outline" size="sm" onClick={() => navigate("/")} className="hidden md:flex">
                   Back to Home
                 </Button>
-                <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="rounded-full p-0">
+                      <Avatar className="h-9 w-9 cursor-pointer hover:ring-2 hover:ring-primary transition-smooth">
+                        <AvatarImage src={adminProfile?.avatar_url} />
+                        <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+                          {adminProfile?.name?.charAt(0) || "A"}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 bg-card border-border z-[100]">
+                    <div className="px-3 py-2 border-b border-border">
+                      <p className="font-medium text-sm">{adminProfile?.name}</p>
+                      <p className="text-xs text-muted-foreground">{adminProfile?.email}</p>
+                    </div>
+                    <DropdownMenuItem onClick={() => navigate("/")} className="cursor-pointer md:hidden">
+                      Back to Home
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
           </header>
@@ -254,7 +274,7 @@ const AdminDashboard = () => {
           {/* Main Content Area */}
           <main className="flex-1 p-6 overflow-auto">
             {/* Stats Cards */}
-            <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${isSuperAdmin ? '6' : '5'} gap-6 mb-8`}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 md:gap-6 mb-8">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">Total Messages</CardTitle>

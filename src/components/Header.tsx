@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Menu, X, GraduationCap, User, LogOut } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/beyondviewfinder-logo.png";
@@ -101,23 +102,32 @@ const Header = () => {
 
           {/* CTA Button / Profile */}
           <div className="hidden md:block">
-            {user ? <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 cursor-pointer" onClick={handleProfileClick}>
-                  <Avatar className="h-8 w-8">
-                    <AvatarImage src={userProfile?.avatar_url} />
-                    <AvatarFallback>
-                      {userProfile?.name?.charAt(0) || user.email?.charAt(0)?.toUpperCase() || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="text-sm">
-                    <p className="font-medium">{userProfile?.name || user.email}</p>
+            {user ? <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="rounded-full p-0">
+                    <Avatar className="h-9 w-9 cursor-pointer hover:ring-2 hover:ring-primary transition-smooth">
+                      <AvatarImage src={userProfile?.avatar_url} />
+                      <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+                        {userProfile?.name?.charAt(0) || user.email?.charAt(0)?.toUpperCase() || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-card border-border z-[100]">
+                  <div className="px-3 py-2 border-b border-border">
+                    <p className="font-medium text-sm">{userProfile?.name || user.email}</p>
                     <p className="text-xs text-muted-foreground capitalize">{userProfile?.type || 'user'}</p>
                   </div>
-                </div>
-                <Button variant="ghost" size="sm" onClick={handleSignOut}>
-                  <LogOut className="h-4 w-4" />
-                </Button>
-              </div> : <Button variant="default" className="bg-gradient-primary hover:shadow-glow transition-smooth" onClick={() => navigate("/auth")}>
+                  <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu> : <Button variant="default" className="bg-gradient-primary hover:shadow-glow transition-smooth" onClick={() => navigate("/auth")}>
                 Sign Up
               </Button>}
           </div>
@@ -135,24 +145,33 @@ const Header = () => {
                   {item.label}
                 </a>)}
               <div className="px-4 pt-2">
-                {user ? <div className="space-y-2">
-                    <div className="flex items-center space-x-2 p-2 rounded-lg bg-secondary" onClick={handleProfileClick}>
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={userProfile?.avatar_url} />
-                        <AvatarFallback>
-                          {userProfile?.name?.charAt(0) || user.email?.charAt(0)?.toUpperCase() || "U"}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="text-sm">
-                        <p className="font-medium">{userProfile?.name || user.email}</p>
+                {user ? <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="w-full justify-start p-2">
+                        <Avatar className="h-8 w-8 mr-2">
+                          <AvatarImage src={userProfile?.avatar_url} />
+                          <AvatarFallback className="bg-gradient-primary text-primary-foreground">
+                            {userProfile?.name?.charAt(0) || user.email?.charAt(0)?.toUpperCase() || "U"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span className="text-sm">Profile Menu</span>
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-56 bg-card border-border z-[100]">
+                      <div className="px-3 py-2 border-b border-border">
+                        <p className="font-medium text-sm">{userProfile?.name || user.email}</p>
                         <p className="text-xs text-muted-foreground capitalize">{userProfile?.type || 'user'}</p>
                       </div>
-                    </div>
-                    <Button variant="outline" className="w-full" onClick={handleSignOut}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
-                    </Button>
-                  </div> : <Button variant="default" className="w-full bg-gradient-primary hover:shadow-glow transition-smooth" onClick={() => navigate("/auth")}>
+                      <DropdownMenuItem onClick={handleProfileClick} className="cursor-pointer">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </DropdownMenuItem>
+                      <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer text-destructive">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu> : <Button variant="default" className="w-full bg-gradient-primary hover:shadow-glow transition-smooth" onClick={() => navigate("/auth")}>
                     Sign Up
                   </Button>}
               </div>

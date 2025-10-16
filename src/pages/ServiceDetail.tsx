@@ -202,45 +202,45 @@ const ServiceDetail = () => {
               Back to Home
             </Button>
 
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-start">
               {/* Left Side - Image */}
               {service.isProgram && service.image_url ? (
                 <div className="order-2 lg:order-1">
-                  <div className="rounded-xl overflow-hidden shadow-elegant h-full">
+                  <div className="rounded-xl overflow-hidden shadow-elegant sticky top-24">
                     <img 
                       src={service.image_url} 
                       alt={service.title}
-                      className="w-full h-full object-cover min-h-[400px] lg:min-h-[500px]"
+                      className="w-full h-full object-cover aspect-[4/3]"
                     />
                   </div>
                 </div>
               ) : (
                 <div className="order-2 lg:order-1 flex items-center justify-center">
-                  <div className="bg-gradient-primary p-12 rounded-2xl shadow-glow">
-                    <Icon className="h-32 w-32 text-primary-foreground" />
+                  <div className="bg-gradient-primary p-8 sm:p-12 rounded-2xl shadow-glow">
+                    <Icon className="h-24 w-24 sm:h-32 sm:w-32 text-primary-foreground" />
                   </div>
                 </div>
               )}
 
               {/* Right Side - Content */}
-              <div className="order-1 lg:order-2 space-y-6">
-                {isAdmin && (
+              <div className="order-1 lg:order-2 space-y-4 sm:space-y-6">
+                {isAdmin && !service.isProgram && (
                   <div className="flex gap-2 justify-end">
                     {editMode ? (
                       <>
                         <Button onClick={handleSave} size="sm" className="bg-green-600 hover:bg-green-700">
-                          <Save className="h-4 w-4 mr-2" />
-                          Save
+                          <Save className="h-4 w-4 mr-1 sm:mr-2" />
+                          <span className="hidden sm:inline">Save</span>
                         </Button>
                         <Button onClick={handleCancel} variant="outline" size="sm">
-                          <X className="h-4 w-4 mr-2" />
-                          Cancel
+                          <X className="h-4 w-4 mr-1 sm:mr-2" />
+                          <span className="hidden sm:inline">Cancel</span>
                         </Button>
                       </>
                     ) : (
                       <Button onClick={handleEdit} variant="outline" size="sm">
-                        <Edit className="h-4 w-4 mr-2" />
-                        Edit
+                        <Edit className="h-4 w-4 mr-1 sm:mr-2" />
+                        <span className="hidden sm:inline">Edit</span>
                       </Button>
                     )}
                   </div>
@@ -251,27 +251,27 @@ const ServiceDetail = () => {
                     <Input
                       value={editData.title}
                       onChange={(e) => setEditData({...editData, title: e.target.value})}
-                      className="text-3xl lg:text-4xl font-bold bg-transparent border-2 border-primary"
+                      className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-transparent border-2 border-primary"
                     />
                     <Textarea
                       value={editData.description}
                       onChange={(e) => setEditData({...editData, description: e.target.value})}
-                      className="text-lg leading-relaxed min-h-32"
+                      className="text-base sm:text-lg leading-relaxed min-h-32"
                       placeholder={service.isProgram ? "Enter program details..." : "Enter service description..."}
                     />
                   </div>
                 ) : (
                   <>
                     <div>
-                      <h1 className="text-3xl lg:text-5xl font-bold mb-4 leading-tight">
+                      <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold mb-3 sm:mb-4 leading-tight">
                         {service.title}
                       </h1>
-                      <p className="text-lg text-muted-foreground leading-relaxed">
+                      <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
                         {service.description || "Contact us for more information about this program."}
                       </p>
                     </div>
 
-                    <div className="space-y-4 pt-4">
+                    <div className="space-y-3 sm:space-y-4 pt-4">
                       <div className="flex items-start gap-3">
                         <div className="bg-primary/20 p-2 rounded-lg mt-1">
                           <FileCheck className="h-5 w-5 text-primary" />
@@ -301,7 +301,7 @@ const ServiceDetail = () => {
                       </div>
                     </div>
 
-                    <div className="pt-6">
+                    <div className="pt-4 sm:pt-6">
                       <Button 
                         size="lg"
                         className="w-full sm:w-auto"

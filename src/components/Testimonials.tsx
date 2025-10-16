@@ -20,6 +20,21 @@ const Testimonials = () => {
     loop: true,
     align: "start"
   });
+  
+  // Auto-scroll on mobile
+  useEffect(() => {
+    if (!emblaApi) return;
+    
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile) return;
+    
+    const autoScroll = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 3000); // Auto-scroll every 3 seconds on mobile
+    
+    return () => clearInterval(autoScroll);
+  }, [emblaApi]);
+  
   useEffect(() => {
     loadTestimonials();
   }, []);
@@ -111,8 +126,8 @@ const Testimonials = () => {
               We strongly support best practice sharing across our operations around the world and across various sectors.
             </p>
             
-            {/* Navigation Arrows */}
-            <div className="flex gap-4">
+            {/* Navigation Arrows - Hidden on mobile */}
+            <div className="hidden md:flex gap-4">
               <Button onClick={scrollPrev} variant="outline" size="icon" className="rounded-full w-14 h-14 border-2 border-white bg-transparent hover:bg-white hover:text-slate-900 text-white transition-smooth">
                 <ChevronLeft className="h-6 w-6" />
               </Button>
